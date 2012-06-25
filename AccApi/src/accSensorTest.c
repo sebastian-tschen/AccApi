@@ -12,6 +12,8 @@
  *      http://www.apache.org/licenses/LICENSE-2.0
  */
 
+#include "../header/smb380.h"
+
 main() {
 
 	acc_sensor_init();

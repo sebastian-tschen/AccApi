@@ -14,8 +14,11 @@
  *
  */
 
-#ifdef ECLIPSE_ON_WINDOWS
-#include<somedefs.h>
+#ifdef __WIN32__
+#include "ext_header/somedefs.h"
+#include "ext_header/linux/getopt.h"
+#include "ext_header/linux/types.h"
+#include "ext_header/linux/spi/spidev.h"
 #endif
 
 #include <stdint.h>

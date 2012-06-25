@@ -22,6 +22,7 @@
 #include "../header/spiInterface.h"
 #include <stdint.h>
 #include <stdio.h>
+#include <math.h>
 
 //init the whole thing
 int acc_sensor_init() {
@@ -56,7 +57,7 @@ int acc_sensor_init() {
 }
 
 //void main(int argc, char *argv[]){
-void main() {
+void old_main() {
 	set_device("/dev/spidev0.0");
 	set_speed(30000);
 	set_spi_mode(3);
@@ -136,20 +137,20 @@ short get_y_axis(){
 	smb380_read_accel_y(&y);
 	return y;
 }
-float TEMP_OFFSET=0;
-float get_temp(){
-	return get_raw_temp()-TEMP_OFFSET;
-}
-
-get_raw_temp(){
+float get_raw_temp(){
 	unsigned char temp_chip_value;
 	smb380_read_temperature(&temp_chip_value);
 	float t = -30 + (0.5 * temp_chip_value);
 	return t;
 }
+float TEMP_OFFSET=0;
+float get_temp(){
+	return get_raw_temp()-TEMP_OFFSET;
+}
+
 
 void set_temp(float t){
-	TEMP_OFFSET=get_raw_temp-t;
+	TEMP_OFFSET = get_raw_temp() - t;
 }
 
 short X_AXIS_OFFSET=0;
