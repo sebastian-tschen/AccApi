@@ -33,5 +33,8 @@ void set_temp(float t);
 void set_x_axis_zero();
 void set_y_axis_zero();
 void set_z_axis_zero();
+void set_x_axis_zero_to(short);
+void set_y_axis_zero_to(short);
+void set_z_axis_zero_to(short);
 
 #endif /* ACCSENSORAPI_H_ */

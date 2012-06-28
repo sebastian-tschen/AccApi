@@ -24,6 +24,9 @@
 #include <stdio.h>
 #include <math.h>
 
+short X_AXIS_OFFSET=0;
+short Y_AXIS_OFFSET=0;
+short Z_AXIS_OFFSET=0;
 //init the whole thing
 int acc_sensor_init() {
 
@@ -117,24 +120,30 @@ void old_main() {
 	 */
 }
 
+smb380acc_t xyz;
 smb380acc_t * get_all_axis() {
-	smb380acc_t* xzy;
-	smb380_read_accel_xyz(xzy);
-	return xzy;
+	smb380_read_accel_xyz(&xyz);
+	xyz.x -= X_AXIS_OFFSET;
+	xyz.y -= Y_AXIS_OFFSET;
+	xyz.z -= Z_AXIS_OFFSET;
+	return &xyz;
 }
 short get_z_axis(){
 	short z;
 	smb380_read_accel_z(&z);
+	z -= Z_AXIS_OFFSET;
 	return z;
 }
 short get_x_axis(){
 	short x;
 	smb380_read_accel_x(&x);
+	x -= X_AXIS_OFFSET;
 	return x;
 }
 short get_y_axis(){
 	short y;
 	smb380_read_accel_y(&y);
+	y -= Y_AXIS_OFFSET;
 	return y;
 }
 float get_raw_temp(){
@@ -153,9 +162,6 @@ void set_temp(float t){
 	TEMP_OFFSET = get_raw_temp() - t;
 }
 
-short X_AXIS_OFFSET=0;
-short Y_AXIS_OFFSET=0;
-short Z_AXIS_OFFSET=0;
 
 void set_x_axis_zero(){
 	X_AXIS_OFFSET=get_x_axis();
@@ -166,6 +172,17 @@ void set_y_axis_zero(){
 void set_z_axis_zero(){
 	Z_AXIS_OFFSET=get_z_axis();
 }
+
+void set_x_axis_zero_to(short i){
+        X_AXIS_OFFSET=get_x_axis()-i;
+}
+void set_y_axis_zero_to(short i){
+        Y_AXIS_OFFSET=get_y_axis()-i;
+}
+void set_z_axis_zero_to(short i){
+        Z_AXIS_OFFSET=get_z_axis()-i;
+}
+
 
 
 
