@@ -15,7 +15,7 @@
  *
  */
 
-
+#include <stdint.h>
 char bus_write(unsigned char, unsigned char, unsigned char *, unsigned char );
 
 

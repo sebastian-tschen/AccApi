@@ -25,7 +25,7 @@ main() {
 	set_temp(25.0);
 	set_x_axis_zero();
 	set_y_axis_zero();
-	set_z_axis_zero_to(-255);
+	set_z_axis_zero_to(255);
 
 	while (1) {
 
