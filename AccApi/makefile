@@ -6,6 +6,8 @@ CFLAGS = -I.
 LDFLAGS =
 CONF = .
 SOURCES :=  $(shell find ./ -type f -name '*${SRC_FILTER}')
+SONAME = libaccapi.so.1.0.0
+LDSOFLAGS = -shared -Wl,-soname,libaccapi.so.1
 ################
 
 ################target_specific conf
@@ -13,9 +15,9 @@ SOURCES :=  $(shell find ./ -type f -name '*${SRC_FILTER}')
 ##### single target without a name - so we just call "make" without CONF=... for this target
 ifeq ($(CONF),.)
 #mkres := $(shell mkdir $(CONF))
-CFLAGS += 
-TARGETDIR = bin
-TARGET = $(TARGETDIR)/testsensor
+CFLAGS += -g -fPIC
+TESTBINDIR = bin
+TESTBIN = $(TESTBINDIR)/testsensor
 CC = gcc
 LD = gcc
 endif
@@ -27,23 +29,31 @@ endif
 OBJS := $(patsubst ./%${SRC_FILTER}, ${CONF}/%.o, $(SOURCES))
 
 #all: post-build
-#post-build: $(TARGET)
+#post-build: $(TESTBIN)
 #   @echo post_build_step if you want to run somthing here like copy the binary to somewhere, etc.
 #
 
-all: $(TARGET)
+all: $(TESTBIN) $(SONAME)
 
-$(TARGETDIR):
-	mkdir -p $(TARGETDIR)
+$(TESTBINDIR):
+	mkdir -p $@
 
-$(TARGET): ${OBJS} ${TARGETDIR}
-	$(LD) ${OBJS} ${LIBS} ${LDFLAGS} -o ${CONF}/"$(TARGET)"
+$(TESTBIN): ${OBJS} ${TESTBINDIR}
+	$(LD) ${OBJS} ${LIBS} ${LDFLAGS} -o ${CONF}/"$(TESTBIN)"
 
 ${CONF}/%.o: %${SRC_FILTER}
 	$(CC) $(CFLAGS) -o $@ -c $<
 
+$(SONAME): ${OBJS}
+	$(LD) $(LDSOFLAGS) -o $(SONAME) ${OBJS}
+
+so: $(SONAME)
+
 clean:
-	rm -f ${CONF}/$(TARGET)
+	rm -f ${CONF}/$(TESTBIN)
 	rm -f $(OBJS)
-	rm -rf $(TARGETDIR)
+	rm -rf $(TESTBINDIR)
+	rm -f $(SONAME)
+
+
 
