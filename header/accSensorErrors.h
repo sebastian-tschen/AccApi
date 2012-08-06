@@ -1,0 +1,2 @@
+#define WRONG_SENSOR_ID_ERROR 1
+#define SPI_BUS_READ_ERROR 2

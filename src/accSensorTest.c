@@ -14,23 +14,67 @@
 
 #include "../header/smb380.h"
 #include "../header/accSensorApi.h"
+#include "../header/accSensorErrors.h"
 #include <stdio.h>
 
-main() {
+int status;
+int check_status(){
 
-	acc_sensor_init();
+status= acc_sensor_get_status();
+if (status){
+	puts("error reading from sensor");
+
+}
+return status;
+}
+
+int main() {
+	int status=0;
+	char *device="/dev/spidev0.0";
+	int speed = 500000;
+	status=acc_sensor_init(speed,device);
+	if(status){
+		puts("error initiallizing sensor");
+		return status;
+	}
+		
 
 	smb380acc_t *xyz;
 	float temp;
 	set_temp(25.0);
+	if(check_status()){
+		return status;
+	}
 	set_x_axis_zero();
+        if(check_status()){
+                return status;
+        }
+
 	set_y_axis_zero();
+        if(check_status()){
+                return status;
+        }
+
 	set_z_axis_zero_to(255);
+        if(check_status()){
+                return status;
+        }
 
+
+	int counter=0;
 	while (1) {
-
+	counter++;
+	if (counter % 1024==0){
+		if(acc_sensor_check_id()){
+			return 1;
+		}
+	}
 //	puts("blubb1");
 		xyz = get_all_axis();
+        if(check_status()){
+                return status;
+        }
+
 //		printf("%d",sizeof(xyz));
 //	puts("blubb");
 		temp = get_temp();

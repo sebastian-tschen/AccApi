@@ -16,7 +16,7 @@
 #ifndef ACCSENSORAPI_H_
 #define ACCSENSORAPI_H_
 
-int acc_sensor_init();
+int acc_sensor_init(int speed, char *);
 
 //get the values. note: its more efficient to get all axis at once than to get each one seperately
 smb380acc_t * get_all_axis();
@@ -36,5 +36,7 @@ void set_z_axis_zero();
 void set_x_axis_zero_to(short);
 void set_y_axis_zero_to(short);
 void set_z_axis_zero_to(short);
+int acc_sensor_get_status();
+int acc_sensor_check_id();
 
 #endif /* ACCSENSORAPI_H_ */
